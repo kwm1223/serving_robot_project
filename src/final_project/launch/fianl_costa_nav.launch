@@ -1,0 +1,37 @@
+<launch>
+    <!-- world and robot -->
+    <!-- arg for robots -->
+    <arg name= "x" default="-2.0"/>
+    <arg name ="y" default="-0.5"/>
+    <arg name = "z" default="0.0"/>
+    <arg name="roll" default="0.0"/>
+    <arg name="pitch" default="0.0"/>
+    <arg name="yaw" default="0.0"/>
+
+    <!--open world -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find final_project)/worlds/costa_coffee_mod.world"/>
+        <arg name="paused" value="false"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="gui" value="true"/>
+        <arg name="headless" value="false"/>
+        <arg name="debug" value="false"/>
+        <arg name="verbose" value="true"/>
+    </include>
+    <!-- put robot in world-->
+    <include file="$(find final_project)/launch/put_robot_in_world.launch">
+        <arg name="x" value="$(arg x)"/>
+        <arg name="y" value="$(arg y)"/>
+        <arg name="z" value="$(arg z)"/>
+    </include>
+
+  <!-- serving static map -->
+  <node pkg="map_server" type="map_server" name="map_server" args="$(find final_project)/maps/costa_nav.yaml"/>
+  <!-- AMCL.launch.xml -->
+  <include file="$(find final_project)/config/amcl.launch.xml" />
+  <!-- launch rviz -->
+  <!-- YOU MUST CHANGE RVIZ FILE AS FINAL!!-->
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find final_project)/rviz/costa_nav.rviz"/>
+  <!-- move base launch -->
+  <!--waypoints launch -->
+</launch>
