@@ -1,0 +1,6 @@
+devel_space: /home/kwm1223/serving_robot_project/devel
+install: false
+install_space: /home/kwm1223/serving_robot_project/install
+profile: default
+source_space: /home/kwm1223/serving_robot_project/src
+workspace: /home/kwm1223/serving_robot_project
