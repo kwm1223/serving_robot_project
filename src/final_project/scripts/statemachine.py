@@ -10,14 +10,14 @@ from std_msgs.msg import Empty
 
 waypoints = []
 
-wpp_list = {1 : (4.5, -0.7),
-           2 : (5.5, -4.3),
+wpp_list = {1 : (4.5, -0.5),
+           2 : (5.45, -4.3),
            3 : (-6.25, -3.9),
            4 : (-12.5, -0.7),
            5 : (-9.5, 0.02)}
 
 # AMCL NODE
-def convert_PoseWithCovarianceStamped_to_PoseArray(warypoints):
+def convert_PoseWithCovarianceStamped_to_PoseArray(waypoints):
     """Publishing waypoints as pose array
         You can see at rviz"""
     poses=PoseArray()
