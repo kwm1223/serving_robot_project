@@ -21,60 +21,65 @@
         <arg name="verbose" value="true"/>
     </include>
     <!-- put robot in world-->
-    <include file="$(find final_project)/launch/put_robot_in_world.launch">
-        <arg name="x" value="$(arg x)"/>
-        <arg name="y" value="$(arg y)"/>
-        <arg name="z" value="$(arg z)"/>
-    </include>
+    <arg name="model" default="burger" doc="model type [burger, waffle]"/>
+    <param name="robot_description" command="$(find xacro)/xacro $(find final_project)/urdf/turtlebot3_$(arg model).urdf.xacro" />
 
-  <!-- serving static map -->
-  <node pkg="map_server" type="map_server" name="map_server" args="$(find final_project)/maps/costa_nav.yaml"/>
-  <!-- AMCL.launch.xml -->
-  <include file="$(find final_project)/config/amcl.launch.xml" />
-  <!-- launch rviz -->
-  <!-- YOU MUST CHANGE RVIZ FILE AS FINAL!!-->
-  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find final_project)/rviz/costa_nav.rviz"/>
+    <!--<node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model turtlebot3_burger -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw) -param robot_description" />-->
+    <node name="robot_state_publisher_turtlebot3" pkg="robot_state_publisher" type="robot_state_publisher"
+        respawn="true" output="screen">
+        <param name="publish_frequency" type="double" value="5.0" />
+    </node>
 
-
-
-  <!-- ######################################### move base launch ############################################################# -->
-  <arg name="cmd_vel_topic" default="/cmd_vel"/>
-  <arg name="odom_topic" default="odom" />
-
-  <arg name="base_global_planner" default="navfn/NavfnROS"/>
-  <arg name="base_local_planner" default="dwa_local_planner/DWAPlannerROS"/>
-<!-- <arg name="base_local_planner" default="base_local_planner/TrajectoryPlannerROS"/> -->
+    <node pkg="tf" type="static_transform_publisher" name="map_to_odom_publisher"
+    args="0 0 0 0 0 0 map odom 30" />
+    <!-- serving static map -->
+    <node pkg="map_server" type="map_server" name="map_server" args="$(find final_project)/maps/costa_nav.yaml"/>
+    <!-- AMCL.launch.xml -->
+    <include file="$(find final_project)/config/amcl.launch.xml" />
+    <!-- launch rviz -->
+    <!-- YOU MUST CHANGE RVIZ FILE AS FINAL!!-->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find final_project)/rviz/costa_nav.rviz"/>
 
 
-  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
 
-    <!-- Choose Planner!! You can use dwa planner or trajectory planner-->
-    <param name="base_global_planner" value="$(arg base_global_planner)"/>
-    <param name="base_local_planner" value="$(arg base_local_planner)"/>
-    <rosparam file="$(find final_project)/params/move_base_params.yaml" command="load"/>
+    <!-- ######################################### move base launch ############################################################# -->
+    <arg name="cmd_vel_topic" default="/cmd_vel"/>
+    <arg name="odom_topic" default="odom" />
 
-    <!-- observation sources located in costmap_common.yaml -->
-    <rosparam file="$(find final_project)/params/costmap_common.yaml" command="load" ns="global_costmap" />
-    <rosparam file="$(find final_project)/params/costmap_common.yaml" command="load" ns="local_costmap" />
+    <arg name="base_global_planner" default="navfn/NavfnROS"/>
+    <arg name="base_local_planner" default="dwa_local_planner/DWAPlannerROS"/>
+    <!-- <arg name="base_local_planner" default="base_local_planner/TrajectoryPlannerROS"/> -->
 
-    <!-- local costmap, needs size -->
-    <rosparam file="$(find final_project)/params/costmap_local.yaml" command="load" ns="local_costmap" />
 
-    <!-- static global costmap, static map provides size -->
-    <rosparam file="$(find final_project)/params/costmap_global_static.yaml" command="load" ns="global_costmap" unless="$(arg no_static_map)"/>
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
 
-    <!-- global costmap with laser, for odom_navigation_demo -->
-    <rosparam file="$(find final_project)/params/costmap_global_laser.yaml" command="load" ns="global_costmap" if="$(arg no_static_map)"/>
-    <rosparam file="$(find final_project)/params/move_base_params.yaml" command="load" />
-    <rosparam file="$(find final_project)/params/dwa_local_planner_params.yaml" command="load"/>
+      <!-- Choose Planner!! You can use dwa planner or trajectory planner-->
+      <param name="base_global_planner" value="$(arg base_global_planner)"/>
+      <param name="base_local_planner" value="$(arg base_local_planner)"/>
+      <rosparam file="$(find final_project)/params/move_base_params.yaml" command="load"/>
 
-    <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
-    <remap from="odom" to="$(arg odom_topic)"/>
+      <!-- observation sources located in costmap_common.yaml -->
+      <rosparam file="$(find final_project)/params/costmap_common.yaml" command="load" ns="global_costmap" />
+      <rosparam file="$(find final_project)/params/costmap_common.yaml" command="load" ns="local_costmap" />
 
-  </node>
-  <!--####################################### WAYOINT #######################################-->
-  <!--waypoints launch -->
-  <env name="ROSCONSOLE_FORMAT" value="[${serverity}][${thread}][${node}/${function}:${line}]:${message}"/>
-  <arg name="waypoints_topic" default="my_t3_waypoints"/>
-  <node pkg='final_project' type='waypoint.py' name="moving_to_waypoints"/>
+      <!-- local costmap, needs size -->
+      <rosparam file="$(find final_project)/params/costmap_local.yaml" command="load" ns="local_costmap" />
+
+      <!-- static global costmap, static map provides size -->
+      <rosparam file="$(find final_project)/params/costmap_global_static.yaml" command="load" ns="global_costmap" unless="$(arg no_static_map)"/>
+
+      <!-- global costmap with laser, for odom_navigation_demo -->
+      <rosparam file="$(find final_project)/params/costmap_global_laser.yaml" command="load" ns="global_costmap" if="$(arg no_static_map)"/>
+      <rosparam file="$(find final_project)/params/move_base_params.yaml" command="load" />
+      <rosparam file="$(find final_project)/params/dwa_local_planner_params.yaml" command="load"/>
+
+      <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+      <remap from="odom" to="$(arg odom_topic)"/>
+
+    </node>
+    <!--####################################### WAYOINT #######################################-->
+    <!--waypoints launch -->
+    <!--<env name="ROSCONSOLE_FORMAT" value="[${serverity}][${thread}][${node}/${function}:${line}]:${message}"/>
+    <arg name="waypoints_topic" default="my_t3_waypoints"/>
+    <node pkg='final_project' type='waypoint.py' name="moving_to_waypoints"/>-->
 </launch>
