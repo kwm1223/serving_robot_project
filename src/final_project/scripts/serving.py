@@ -5,9 +5,15 @@ import time
 import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal, MoveBaseResult, MoveBaseFeedback
 
-goal_list = [[1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0],
-             [1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0],
-             [-1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0]]
+start_point = []
+
+goal_list = [[-2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0],
+             [5.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0],
+             [5.5, -4.0, 0.0, 0.0, 0.0, 0.0, 1.0],
+             [-6.0, -4.0, 0.0, 0.0, 0.0, 0.0, 1.0],
+             [-12.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0],
+             [-8.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0],
+             ]
 
 def feedback_callback(msg):
     """
