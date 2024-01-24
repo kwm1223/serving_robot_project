@@ -72,5 +72,9 @@
     <remap from="odom" to="$(arg odom_topic)"/>
 
   </node>
+  <!--####################################### WAYOINT #######################################-->
   <!--waypoints launch -->
+  <env name="ROSCONSOLE_FORMAT" value="[${serverity}][${thread}][${node}/${function}:${line}]:${message}"/>
+  <arg name="waypoints_topic" default="my_t3_waypoints"/>
+  <node pkg='final_project' type='waypoint.py' name="moving_to_waypoints"/>
 </launch>
