@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="use_map_topic" default="true"/>
+    <arg name="scan_topic" default="scan" />
+
+    <!-- AMCL NODE-->
+    <node pkg="amcl" type="amcl" name="amcl">
+        <rosparam file="$(find final_project)/config/amcl_params.yaml"/>
+        <remap from="scan" to="$(arg scan_topic)"/>
+    </node>
+</launch>
