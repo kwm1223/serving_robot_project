@@ -7,11 +7,11 @@ import tf.transformations
 from std_msgs.msg import Empty
 from geometry_msgs.msg import PoseWithCovarianceStamped
 
-waypoint_list={1:(4.5, -0.5),
-               2: (5.5, -4.3),
-               3:(-6.25, -3.9),
-               4:(-12.5, -0.7),
-               5:(-9.5, 0.02)}
+waypoint_list={1 : (4.5, -0.5),
+               2 : (5.0, -4.3),
+               3 : (-6.25, -3.9),
+               4 : (-12.5, -0.7),
+               5 : (-8.5, 0.02)}
 
 """
 user:~$ rosmsg show geometry_msgs/PoseWithCovarianceStamped
