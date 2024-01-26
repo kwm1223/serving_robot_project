@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
 #if using noetic line1 -> #! /usr/bin/env python3
 
@@ -109,7 +109,7 @@ while not rospy.is_shutdown():
         rospy.loginfo("Serving Completed!")
         rospy.loginfo("Completed Time : " + str(rospy.get_time()-startTime))
         rospy.loginfo("#"*30)
-        
+
     rospy.loginfo("#"*30)
     rospy.loginfo("Return to Sink!")
     rospy.loginfo("#"*30)
