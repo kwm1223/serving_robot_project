@@ -59,8 +59,8 @@
 
     <!-- local costmap, needs size -->
     <rosparam file="$(find final_project)/params/costmap_local.yaml" command="load" ns="local_costmap" />
-    <param name="local_costmap/width" value="3.0"/>
-    <param name="local_costmap/height" value="3.0"/>
+    <param name="local_costmap/width" value="2.0"/>
+    <param name="local_costmap/height" value="2.0"/>
 
     <!-- static global costmap, static map provides size -->
     <rosparam file="$(find final_project)/params/costmap_global_static.yaml" command="load" ns="global_costmap" unless="$(arg no_static_map)"/>
