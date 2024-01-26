@@ -9,6 +9,9 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from geometry_msgs.msg import PoseArray, PoseWithCovarianceStamped
 from std_msgs.msg import Empty
 
+start_time=0
+end_time=0
+
 waypoints = []
 
 wpp_list = {1 : (4.5, -0.5),
@@ -113,6 +116,10 @@ class FollowPath(State):
 #the range where the states operate
     def execute(self, userdata):
         global waypoints
+        global start_time
+
+        start_time=time.time()
+        rospy.loginfo("Start time is " + str(start_time))
 
         for waypoint in waypoints:
             if waypoints == []:
@@ -151,9 +158,13 @@ class PathComplete(State):
         State.__init__(self, outcomes=['success'])
 
     def execute(self, userdata):
+        global end_time
+        end_time = time.time()
+        total_time = end_time - start_time
         rospy.loginfo("################################")
         rospy.loginfo("##### I bring you a plate. #####")
         rospy.loginfo("### Please return the dishes ###")
+        rospy.loginfo("Total Execution Time: {:.2f} seconds".format(total_time))
         rospy.loginfo("################################")
         return "success"
 
