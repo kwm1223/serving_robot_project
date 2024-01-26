@@ -2,6 +2,7 @@
 
 import threading
 import rospy
+import time
 import actionlib
 from smach import State, StateMachine
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
@@ -10,7 +11,7 @@ from std_msgs.msg import Empty
 
 waypoints = []
 
-wpp_list = {1 : (4.5, -0.7),
+wpp_list = {1 : (4.5, -0.5),
            2 : (5.5, -4.3),
            3 : (-6.25, -3.9),
            4 : (-12.5, -0.7),
@@ -126,7 +127,7 @@ class FollowPath(State):
             goal.target_pose.pose.orientation=waypoint.pose.pose.orientation
 
 
-            if(goal.target_pose.pose.position== wpp_list[2][0] and goal.target_pose.pose.position.y == wpp_list[2][1]):
+            if(goal.target_pose.pose.position.x== wpp_list[2][0] and goal.target_pose.pose.position.y == wpp_list[2][1]):
                 # After getting food, wait for 5(s)
                 rospy.loginfo("Get the food")
                 rospy.sleep(5)
@@ -137,8 +138,8 @@ class FollowPath(State):
                     if(goal.target_pose.pose.position.x==wpp_list[i][0] and goal.target_pose.pose.position.y==wpp_list[i][1]):
                         rospy.loginfo("Serving at table%s is complete"%i)
 
-            rospy.loginfo("Executing move_base goal to position (x,y): %s, %s"%(waypoint.pose.pose.position.x, waypoint.pose.pose.position.y))
-            rospy.loginfo("To cancel the goal: 'rostopic pub -1 /move_base/cancel actionlib_msgs/GoalID -- {}'")
+            # rospy.loginfo("Executing move_base goal to position (x,y): %s, %s"%(waypoint.pose.pose.position.x, waypoint.pose.pose.position.y))
+            # rospy.loginfo("To cancel the goal: 'rostopic pub -1 /move_base/cancel actionlib_msgs/GoalID -- {}'")
             self.client.send_goal(goal=goal)
             self.client.wait_for_result()
         return "success"
