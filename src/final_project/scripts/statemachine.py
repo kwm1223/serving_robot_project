@@ -15,10 +15,10 @@ end_time=0
 waypoints = []
 
 wpp_list = {1 : (4.5, -0.5),
-           2 : (5.5, -4.3),
+           2 : (5.0, -4.3),
            3 : (-6.25, -3.9),
            4 : (-12.5, -0.7),
-           5 : (-9.5, 0.02)}
+           5 : (-8.5, 0.02)}
 
 # AMCL NODE
 def convert_PoseWithCovarianceStamped_to_PoseArray(warypoints):
@@ -46,7 +46,7 @@ class GetPath(State):
             global waypoints
             while not rospy.is_shutdown():
                 data=rospy.wait_for_message('path_reset', Empty)
-                # rospy.loginfo("Recieved path RESET message")
+                # rospy.loginfo("Received path RESET message")
                 # function which initialize the queue for path
                 self.initialize_path_queue()
                 rospy.sleep(3) # wait 3(s) for message because 'rostopic echo' latches.. you can change this
@@ -76,7 +76,7 @@ class GetPath(State):
         ready_thread.start()
 
         waypoints_topic=self.custom_waypoint_topic
-        # rospy.loginfo("Waiting to recieve waypoints via Pose msg on topic %s" % waypoints_topic)
+        # rospy.loginfo("Waiting to receive waypoints via Pose msg on topic %s" % waypoints_topic)
         # rospy.loginfo("To start following waypoints: 'rostopic pub /path_ready std_msgs/Empty -1")
 
         # Wait for published waypoints
